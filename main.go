@@ -17,8 +17,10 @@ func Routes(app fiber.Router) {
 	r := app.Group("/todos")
 	r.Post("/create", CreateTodo)
 	r.Get("/", GetTodo)
+	r.Get("/:id", FindById)
 	r.Put("/:id", UpdateTodo)
 	r.Delete("/:id", DeleteTodo)
+	r.Get("/completed/:completed", FindByCompleted)
 }
 
 func main() {

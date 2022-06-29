@@ -16,6 +16,11 @@ func CreateTodo(c *fiber.Ctx) error {
 func GetTodo(c *fiber.Ctx) error {
 	var todos []Todo
 	db.Find(&todos)
+	if len(todos) == 0 {
+		return c.Status(404).JSON(fiber.Map{
+			"message": "Todo not found",
+		})
+	}
 	return c.JSON(fiber.Map{
 		"data":    todos,
 		"message": "Todos fetched",
@@ -63,4 +68,33 @@ func DeleteTodo(c *fiber.Ctx) error {
 	db.Delete(&todos, "id = ?", id)
 
 	return c.JSON(fiber.Map{"messages": "Todo deleted"})
+}
+
+func FindById(c *fiber.Ctx) error {
+	var todos Todo
+
+	id := c.Params("id")
+
+	db.Find(&todos, "id = ?", id)
+
+	if todos.Id == 0 {
+		return c.Status(404).JSON(fiber.Map{
+			"message": "TodoID not found",
+		})
+
+	}
+	return c.JSON(fiber.Map{
+		"messages": "TodoID found",
+		"data":     todos,
+	})
+}
+
+func FindByCompleted(c *fiber.Ctx) error {
+	var todos Todo
+	completed := c.Params("completed")
+
+	db.Find(&todos, "completed = ?", completed)
+
+	return c.JSON(todos)
+	
 }
