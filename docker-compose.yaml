@@ -1,0 +1,23 @@
+version: "3.9"
+services:
+  postgres:
+    image: postgres:alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: halah
+      POSTGRES_DB: todolist
+
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - DB_URL=postgres://postgres:halah@localhost:5432/todolist
+    depends_on:
+      - postgres
+    networks:
+      - default
+    ports:
+    - "8080:8080"
+volumes:
+  data:

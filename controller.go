@@ -61,7 +61,7 @@ func DeleteTodo(c *fiber.Ctx) error {
 
 	if todos.Id == 0 {
 		return c.Status(404).JSON(fiber.Map{
-			"message": "Todo not found",
+			"message": "Failed delete todo, todo not found",
 		})
 	}
 
@@ -90,7 +90,7 @@ func FindById(c *fiber.Ctx) error {
 }
 
 func FindByCompleted(c *fiber.Ctx) error {
-	var todos Todo
+	var todos []Todo
 	completed := c.Params("completed")
 
 	db.Find(&todos, "completed = ?", completed)
